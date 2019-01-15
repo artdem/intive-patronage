@@ -1,7 +1,7 @@
 package com.example.intivepatronage.conferenceRoom;
 
-import com.example.intivepatronage.organization.Organization;
-import com.example.intivepatronage.reservation.Reservation;
+import com.example.intivepatronage.organization.Organizations;
+import com.example.intivepatronage.reservation.Reservations;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -9,8 +9,8 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
-@Table(name = "ConferenceRoom")
-public class ConferenceRoom {
+@Table(name = "ConferenceRooms")
+public class ConferenceRooms {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,14 +32,14 @@ public class ConferenceRoom {
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "conferenceRoom")
-    public List<Reservation> reservations;
+    public List<Reservations> reservations;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id")
     @JsonIgnore
-    private Organization organization;
+    private Organizations organization;
 
-    public ConferenceRoom() {
+    public ConferenceRooms() {
     }
 
     public Long getId() {
@@ -82,19 +82,19 @@ public class ConferenceRoom {
         this.seats = seats;
     }
 
-    public List<Reservation> getReservations() {
+    public List<Reservations> getReservations() {
         return reservations;
     }
 
-    public void setReservations(List<Reservation> reservations) {
+    public void setReservations(List<Reservations> reservations) {
         this.reservations = reservations;
     }
 
-    public Organization getOrganization() {
+    public Organizations getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public void setOrganization(Organizations organization) {
         this.organization = organization;
     }
 }

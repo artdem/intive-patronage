@@ -1,17 +1,16 @@
 package com.example.intivepatronage.reservation;
 
-import com.example.intivepatronage.conferenceRoom.ConferenceRoom;
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
-public class Reservation {
+public class Reservations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,15 +21,15 @@ public class Reservation {
     @Column(unique = true)
     private String reservationName;
 
-    private LocalDateTime reservationStart;
+    private Date reservationStart;
 
-    private LocalDateTime reservationEnd;
+    private Date reservationEnd;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    ConferenceRoom conferenceRoom;
+    ConferenceRooms conferenceRoom;
 
-    public Reservation() {
+    public Reservations() {
     }
 
     public Long getId() {
@@ -49,27 +48,27 @@ public class Reservation {
         this.reservationName = reservationName;
     }
 
-    public LocalDateTime getReservationStart() {
+    public Date getReservationStart() {
         return reservationStart;
     }
 
-    public void setReservationStart(LocalDateTime reservationStart) {
+    public void setReservationStart(Date reservationStart) {
         this.reservationStart = reservationStart;
     }
 
-    public LocalDateTime getReservationEnd() {
+    public Date getReservationEnd() {
         return reservationEnd;
     }
 
-    public void setReservationEnd(LocalDateTime reservationEnd) {
+    public void setReservationEnd(Date reservationEnd) {
         this.reservationEnd = reservationEnd;
     }
 
-    public ConferenceRoom getConferenceRoom() {
+    public ConferenceRooms getConferenceRoom() {
         return conferenceRoom;
     }
 
-    public void setConferenceRoom(ConferenceRoom conferenceRoom) {
+    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
         this.conferenceRoom = conferenceRoom;
     }
 }

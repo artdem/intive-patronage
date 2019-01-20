@@ -51,6 +51,9 @@ public class ReservationsService {
         if (!reservationsRepository.existsReservationByReservationName(updatedReservation.getReservationName())) {
             return reservationsRepository.findById(id)
                     .map(reservation -> {
+                        validator.checkReservationDate(updatedReservation);
+                        validator.checkReservationDuration(updatedReservation);
+                        validator.checkAvailability(updatedReservation, id);
                         reservation.setReservationName(updatedReservation.getReservationName());
                         reservation.setConferenceRoom(updatedReservation.getConferenceRoom());
                         reservation.setReservationStart(updatedReservation.getReservationStart());

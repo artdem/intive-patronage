@@ -1,5 +1,6 @@
 package com.example.intivepatronage.reservation;
 
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.example.intivepatronage.conferenceRoom.ConferenceRoomsRepository;
 import com.example.intivepatronage.exceptions.ConferenceRoomAlreadyBookedException;
 import com.example.intivepatronage.exceptions.IllegalStartEndTimeException;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 public class ReservationsValidator {
@@ -37,7 +40,7 @@ public class ReservationsValidator {
     }
 
     public void checkAvailability(Reservations newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
-        conferenceRoomsRepository.findById(id).get().getReservations().stream()
+        conferenceRoomsRepository.findById(id).ifPresent(conferenceRooms -> conferenceRooms.getReservations().stream()
                 .filter(reservation ->
                         ((newReservation.getReservationStart().isAfter(reservation.getReservationStart()) && (newReservation.getReservationStart().isBefore(reservation.getReservationEnd()))) ||
                                 (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
@@ -46,7 +49,7 @@ public class ReservationsValidator {
                 .findAny()
                 .ifPresent(reservation -> {
                     throw new ConferenceRoomAlreadyBookedException();
-                });
+                }));
     }
 
 }

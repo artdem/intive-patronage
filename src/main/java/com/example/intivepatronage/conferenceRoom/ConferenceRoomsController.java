@@ -1,5 +1,6 @@
 package com.example.intivepatronage.conferenceRoom;
 
+import com.example.intivepatronage.exceptions.ConferenceRoomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,36 +18,36 @@ public class ConferenceRoomsController {
         this.conferenceRoomsService = conferenceRoomsService;
     }
 
-    @GetMapping("/conferenceRoom")
+    @GetMapping("/conferencerooms")
     public List<ConferenceRooms> allConferenceRooms() {
         return conferenceRoomsService.allConferenceRooms();
     }
 
-    @GetMapping("/conferenceRoom/{id}")
+    @GetMapping("/conferencerooms/{id}")
     public ResponseEntity<ConferenceRooms> conferenceRoomById(@PathVariable Long id) {
-        ConferenceRooms conferenceRoom = conferenceRoomsService.conferenceRoomById(id);
+        var conferenceRoom = conferenceRoomsService.conferenceRoomById(id);
         return ResponseEntity.ok().body(conferenceRoom);
     }
 
-    @PostMapping("/conferenceRoom")
+    @PostMapping("/conferencerooms")
     public ResponseEntity<ConferenceRooms> addConferenceRoom(@Valid @RequestBody ConferenceRooms conferenceRoom) {
         conferenceRoomsService.newConferenceRoom(conferenceRoom);
         return ResponseEntity.ok().body(conferenceRoom);
     }
 
-    @PostMapping("/organization/{organizationId}/conferenceRoom")
+    @PostMapping("/organizations/{organizationId}/conferencerooms")
     public ResponseEntity<ConferenceRooms> addConferenceRoomToOrganization(@Valid @RequestBody ConferenceRooms conferenceRoom, @PathVariable Long organizationId) {
         conferenceRoomsService.newConferenceRoomWithOrganization(conferenceRoom, organizationId);
         return ResponseEntity.ok().body(conferenceRoom);
     }
 
-    @PutMapping("/conferenceRoom/{id}")
+    @PutMapping("/conferencerooms/{id}")
     public ResponseEntity<ConferenceRooms> updateConferenceRoom(@Valid @RequestBody ConferenceRooms updatedConferenceRoom, @PathVariable Long id) {
-        conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id);
-        return ResponseEntity.ok().body(updatedConferenceRoom);
+        var conferenceRoom = conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id);
+        return ResponseEntity.ok().body(conferenceRoom);
     }
 
-    @DeleteMapping("/conferenceRoom/{id}")
+    @DeleteMapping("/conferencerooms/{id}")
     public void deleteConferenceRoom(@PathVariable Long id) throws ConferenceRoomNotFoundException {
         conferenceRoomsService.deleteConferenceRoom(id);
     }

@@ -1,7 +1,8 @@
 package com.example.intivepatronage.conferenceRoom;
 
-import com.example.intivepatronage.UniqueNameException;
-import com.example.intivepatronage.organization.OrganizationNotFoundException;
+import com.example.intivepatronage.exceptions.UniqueNameException;
+import com.example.intivepatronage.exceptions.ConferenceRoomNotFoundException;
+import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
 import com.example.intivepatronage.organization.OrganizationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class ConferenceRoomsService {
     }
 
     public ConferenceRooms conferenceRoomById(Long id) {
-        ConferenceRooms conferenceRoom = conferenceRoomsRepository.findById(id)
+        var conferenceRoom = conferenceRoomsRepository.findById(id)
                 .orElseThrow(() -> new ConferenceRoomNotFoundException(id));
         return conferenceRoom;
     }
@@ -38,33 +39,35 @@ public class ConferenceRoomsService {
         }
     }
 
-    public void newConferenceRoomWithOrganization(ConferenceRooms newConferenceRoom, Long id) throws OrganizationNotFoundException, UniqueNameException{
-        if(!conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(newConferenceRoom.getConferenceRoomName())){
+    public void newConferenceRoomWithOrganization(ConferenceRooms newConferenceRoom, Long id) throws OrganizationNotFoundException, UniqueNameException {
+        if (!conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(newConferenceRoom.getConferenceRoomName())) {
             organizationsRepository.findById(id)
-                    .map(organization -> {newConferenceRoom.setOrganization(organization);
+                    .map(organization -> {
+                        newConferenceRoom.setOrganization(organization);
                         return conferenceRoomsRepository.save(newConferenceRoom);
-                    }).orElseThrow(()-> new OrganizationNotFoundException(id));
+                    }).orElseThrow(() -> new OrganizationNotFoundException(id));
         } else {
             throw new UniqueNameException();
         }
     }
 
-    public void updateConferenceRoom(ConferenceRooms updatedConferenceRoom, Long id) throws UniqueNameException, ConferenceRoomNotFoundException {
-        ConferenceRooms conferenceRoom = conferenceRoomsRepository.findById(id)
-                .orElseThrow(()-> new ConferenceRoomNotFoundException(id));
-
-        conferenceRoom.setConferenceRoomName(updatedConferenceRoom.getConferenceRoomName());
-        conferenceRoom.setFloor(updatedConferenceRoom.getFloor());
-        conferenceRoom.setSeats(updatedConferenceRoom.getSeats());
-        conferenceRoom.setBooked(updatedConferenceRoom.isBooked());
-        if(!conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(updatedConferenceRoom.getConferenceRoomName())){
-            conferenceRoomsRepository.save(conferenceRoom);
+    public ConferenceRooms updateConferenceRoom(ConferenceRooms updatedConferenceRoom, Long id) throws UniqueNameException, ConferenceRoomNotFoundException {
+        if (!conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(updatedConferenceRoom.getConferenceRoomName())) {
+            return conferenceRoomsRepository.findById(id)
+                    .map(conferenceRoom -> {
+                        conferenceRoom.setConferenceRoomName(updatedConferenceRoom.getConferenceRoomName());
+                        conferenceRoom.setFloor(updatedConferenceRoom.getFloor());
+                        conferenceRoom.setSeats(updatedConferenceRoom.getSeats());
+                        conferenceRoom.setBooked(updatedConferenceRoom.isBooked());
+                        return conferenceRoomsRepository.save(conferenceRoom);
+                    })
+                    .orElseThrow(() -> new ConferenceRoomNotFoundException(id));
         } else {
             throw new UniqueNameException();
         }
     }
 
-    public void deleteConferenceRoom(Long id){
+    public void deleteConferenceRoom(Long id) {
         conferenceRoomsRepository.deleteById(id);
     }
 

@@ -1,6 +1,7 @@
 package com.example.intivepatronage.organization;
 
-import com.example.intivepatronage.UniqueNameException;
+import com.example.intivepatronage.exceptions.UniqueNameException;
+import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class OrganizationsService {
     }
 
     public Organizations organizationById(Long id) throws OrganizationNotFoundException {
-        Organizations organizationById = organizationsRepository.findById(id)
+        var organizationById = organizationsRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(id));
         return organizationById;
     }
@@ -34,13 +35,14 @@ public class OrganizationsService {
         }
     }
 
-    public void updateOrganization(Organizations updatedOrganization, Long id) throws UniqueNameException, OrganizationNotFoundException {
-        Organizations organization = organizationsRepository.findById(id)
-                .orElseThrow(() -> new OrganizationNotFoundException(id));
-
+    public Organizations updateOrganization(Organizations updatedOrganization, Long id) throws UniqueNameException, OrganizationNotFoundException {
         if (!organizationsRepository.existsOrganizationByOrganizationName(updatedOrganization.getOrganizationName())) {
-            organization.setOrganizationName(updatedOrganization.getOrganizationName());
-            organizationsRepository.save(organization);
+            return organizationsRepository.findById(id)
+                    .map(organization -> {
+                        organization.setOrganizationName(updatedOrganization.getOrganizationName());
+                        return organizationsRepository.save(organization);
+                    })
+                    .orElseThrow(() -> new OrganizationNotFoundException(id));
         } else {
             throw new UniqueNameException();
         }

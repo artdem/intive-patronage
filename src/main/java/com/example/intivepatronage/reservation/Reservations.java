@@ -2,12 +2,13 @@ package com.example.intivepatronage.reservation;
 
 import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 
 @Entity
 public class Reservations {
@@ -21,9 +22,11 @@ public class Reservations {
     @Column(unique = true)
     private String reservationName;
 
-    private Date reservationStart;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime reservationStart;
 
-    private Date reservationEnd;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime reservationEnd;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -48,19 +51,19 @@ public class Reservations {
         this.reservationName = reservationName;
     }
 
-    public Date getReservationStart() {
+    public LocalDateTime getReservationStart() {
         return reservationStart;
     }
 
-    public void setReservationStart(Date reservationStart) {
+    public void setReservationStart(LocalDateTime reservationStart) {
         this.reservationStart = reservationStart;
     }
 
-    public Date getReservationEnd() {
+    public LocalDateTime getReservationEnd() {
         return reservationEnd;
     }
 
-    public void setReservationEnd(Date reservationEnd) {
+    public void setReservationEnd(LocalDateTime reservationEnd) {
         this.reservationEnd = reservationEnd;
     }
 
@@ -71,4 +74,5 @@ public class Reservations {
     public void setConferenceRoom(ConferenceRooms conferenceRoom) {
         this.conferenceRoom = conferenceRoom;
     }
+
 }

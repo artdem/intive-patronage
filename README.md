@@ -23,6 +23,18 @@ Using IntelliJ IDEA:
 4. Choose: Use default gradle wrapper and Use auto-import.
 ```
 
+### Starting the application using jar executable file
+
+```
+Windows:
+1. Open CMD
+2. Enter the catalog in which you store the application file
+3. Use the following command: java -jar intivePatronage-0.1.0.jar
+4. Application starts and is ready to use
+
+Required Java version - 11.0.1
+```
+
 ## Using the application
 
 Application allows performing CRUD operations in Reservation System using CURL instructions.
@@ -35,4 +47,6 @@ curl -d '{"organizationName":"Organization name"}' -H "Content-Type: application
 
 2. Adding Conference Room: 
 curl -d '{"conferenceRoomName": "Conference Room name","floor": 10,"booked": true,"seats": 10}' -H "Content-Type: application/json" -X POST localhost:8080/organization/<Organization Id>/conferenceRoom
+
+3. Adding Reservation:
 ```

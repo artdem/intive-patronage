@@ -24,26 +24,20 @@ public class ReservationsController {
 
     @GetMapping("/reservations/{id}")
     public ResponseEntity<Reservations> reservationById(@PathVariable Long id) {
-        Reservations reservation = reservationsService.reservationById(id);
+        var reservation = reservationsService.reservationById(id);
         return ResponseEntity.ok().body(reservation);
     }
 
-    @PostMapping("/reservations")
-    public ResponseEntity<Reservations> newReservation(@Valid @RequestBody Reservations newReservation) {
-        reservationsService.newReservation(newReservation);
-        return ResponseEntity.ok().body(newReservation);
-    }
-
-    @PostMapping("/conferenceRooms/{id}/reservations")
-    public ResponseEntity<Reservations> newReservationWithConferenceRoom(@Valid @RequestBody Reservations newReservation, Long id) {
-        reservationsService.newReservationWithConferenceRoom(newReservation, id);
+    @PostMapping("/conferencerooms/{id}/reservations")
+    public ResponseEntity<Reservations> newReservationWithConferenceRoom(@Valid @RequestBody Reservations newReservation, @PathVariable Long id) {
+        reservationsService.newReservation(newReservation, id);
         return ResponseEntity.ok().body(newReservation);
     }
 
     @PutMapping("/reservations/{id}")
     public ResponseEntity<Reservations> updateReservation(@Valid @RequestBody Reservations updatedReservation, @PathVariable Long id){
-        reservationsService.updatReservation(updatedReservation, id);
-        return ResponseEntity.ok().body(updatedReservation);
+        var reservation = reservationsService.updateReservation(updatedReservation, id);
+        return ResponseEntity.ok().body(reservation);
     }
 
     @DeleteMapping("/reservations/{id}")

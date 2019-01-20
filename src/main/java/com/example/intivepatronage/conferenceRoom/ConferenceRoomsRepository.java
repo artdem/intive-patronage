@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ConferenceRoomRepository extends JpaRepository<ConferenceRoom, Long> {
+public interface ConferenceRoomsRepository extends JpaRepository<ConferenceRooms, Long> {
 
     boolean existsConferenceRoomByConferenceRoomName(String name);
 

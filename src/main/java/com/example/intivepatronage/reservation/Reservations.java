@@ -1,17 +1,17 @@
 package com.example.intivepatronage.reservation;
 
-import com.example.intivepatronage.conferenceRoom.ConferenceRoom;
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-
 @Entity
-public class Reservation {
+public class Reservations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,15 +22,17 @@ public class Reservation {
     @Column(unique = true)
     private String reservationName;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationStart;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
-    ConferenceRoom conferenceRoom;
+    ConferenceRooms conferenceRoom;
 
-    public Reservation() {
+    public Reservations() {
     }
 
     public Long getId() {
@@ -65,11 +67,12 @@ public class Reservation {
         this.reservationEnd = reservationEnd;
     }
 
-    public ConferenceRoom getConferenceRoom() {
+    public ConferenceRooms getConferenceRoom() {
         return conferenceRoom;
     }
 
-    public void setConferenceRoom(ConferenceRoom conferenceRoom) {
+    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
         this.conferenceRoom = conferenceRoom;
     }
+
 }

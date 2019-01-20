@@ -1,4 +1,4 @@
-package com.example.intivepatronage.reservation;
+package com.example.intivepatronage.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

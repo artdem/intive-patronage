@@ -1,4 +1,4 @@
-package com.example.intivepatronage.conferenceRoom;
+package com.example.intivepatronage.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

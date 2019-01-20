@@ -55,7 +55,6 @@ public class ReservationsService {
                         validator.checkReservationDuration(updatedReservation);
                         validator.checkAvailability(updatedReservation, id);
                         reservation.setReservationName(updatedReservation.getReservationName());
-                        reservation.setConferenceRoom(updatedReservation.getConferenceRoom());
                         reservation.setReservationStart(updatedReservation.getReservationStart());
                         reservation.setReservationEnd(updatedReservation.getReservationEnd());
                         return reservationsRepository.save(reservation);

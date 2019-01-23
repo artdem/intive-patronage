@@ -9,46 +9,43 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class ConferenceRoomsController {
+@RequestMapping("/conferencerooms")
+class ConferenceRoomsController {
 
     private final ConferenceRoomsService conferenceRoomsService;
 
     @Autowired
-    public ConferenceRoomsController(ConferenceRoomsService conferenceRoomsService) {
+    ConferenceRoomsController(ConferenceRoomsService conferenceRoomsService) {
         this.conferenceRoomsService = conferenceRoomsService;
     }
 
-    @GetMapping("/conferencerooms")
-    public List<ConferenceRooms> allConferenceRooms() {
+    @GetMapping
+    List<ConferenceRoomsDTO> allConferenceRooms() {
         return conferenceRoomsService.allConferenceRooms();
     }
 
-    @GetMapping("/conferencerooms/{id}")
-    public ResponseEntity<ConferenceRooms> conferenceRoomById(@PathVariable Long id) {
-        var conferenceRoom = conferenceRoomsService.conferenceRoomById(id);
-        return ResponseEntity.ok().body(conferenceRoom);
+    @GetMapping("/{id}")
+    ConferenceRoomsDTO conferenceRoomById(@PathVariable Long id) {
+        return conferenceRoomsService.conferenceRoomById(id);
     }
 
-    @PostMapping("/conferencerooms")
-    public ResponseEntity<ConferenceRooms> addConferenceRoom(@Valid @RequestBody ConferenceRooms conferenceRoom) {
-        conferenceRoomsService.newConferenceRoom(conferenceRoom);
-        return ResponseEntity.ok().body(conferenceRoom);
+    @PostMapping
+    ResponseEntity<ConferenceRoomsDTO> addConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO newConferenceRoom) {
+        return ResponseEntity.ok().body(conferenceRoomsService.newConferenceRoom(newConferenceRoom));
     }
 
-    @PostMapping("/organizations/{organizationId}/conferencerooms")
-    public ResponseEntity<ConferenceRooms> addConferenceRoomToOrganization(@Valid @RequestBody ConferenceRooms conferenceRoom, @PathVariable Long organizationId) {
-        conferenceRoomsService.newConferenceRoomWithOrganization(conferenceRoom, organizationId);
-        return ResponseEntity.ok().body(conferenceRoom);
+    @PostMapping("/{organizationId}/organization")
+    ResponseEntity<ConferenceRoomsDTO> addConferenceRoomToOrganization(@Valid @RequestBody ConferenceRoomsDTO conferenceRoom, @PathVariable Long organizationId) {
+        return ResponseEntity.ok().body(conferenceRoomsService.newConferenceRoomWithOrganization(conferenceRoom, organizationId));
     }
 
-    @PutMapping("/conferencerooms/{id}")
-    public ResponseEntity<ConferenceRooms> updateConferenceRoom(@Valid @RequestBody ConferenceRooms updatedConferenceRoom, @PathVariable Long id) {
-        var conferenceRoom = conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id);
-        return ResponseEntity.ok().body(conferenceRoom);
+    @PutMapping("/{id}")
+    ResponseEntity<ConferenceRoomsDTO> updateConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO updatedConferenceRoom, @PathVariable Long id) {
+        return ResponseEntity.ok().body(conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id));
     }
 
-    @DeleteMapping("/conferencerooms/{id}")
-    public void deleteConferenceRoom(@PathVariable Long id) throws ConferenceRoomNotFoundException {
+    @DeleteMapping("/{id}")
+    void deleteConferenceRoom(@PathVariable Long id) throws ConferenceRoomNotFoundException {
         conferenceRoomsService.deleteConferenceRoom(id);
     }
 

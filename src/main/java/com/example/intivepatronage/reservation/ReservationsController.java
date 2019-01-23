@@ -1,47 +1,44 @@
 package com.example.intivepatronage.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class ReservationsController {
+@RequestMapping("/reservations")
+class ReservationsController {
 
     private final ReservationsService reservationsService;
 
     @Autowired
-    public ReservationsController(ReservationsService reservationsService) {
+    ReservationsController(ReservationsService reservationsService) {
         this.reservationsService = reservationsService;
     }
 
-    @GetMapping("/reservations")
-    public List<Reservations> allReservations() {
+    @GetMapping
+    List<ReservationsDTO> allReservations() {
         return reservationsService.allReservations();
     }
 
-    @GetMapping("/reservations/{id}")
-    public ResponseEntity<Reservations> reservationById(@PathVariable Long id) {
-        var reservation = reservationsService.reservationById(id);
-        return ResponseEntity.ok().body(reservation);
+    @GetMapping("/{id}")
+    ReservationsDTO reservationById(@PathVariable Long id) {
+        return reservationsService.reservationById(id);
     }
 
-    @PostMapping("/conferencerooms/{id}/reservations")
-    public ResponseEntity<Reservations> newReservationWithConferenceRoom(@Valid @RequestBody Reservations newReservation, @PathVariable Long id) {
-        reservationsService.newReservation(newReservation, id);
-        return ResponseEntity.ok().body(newReservation);
+    @PostMapping("/{id}")
+    ReservationsDTO newReservationWithConferenceRoom(@Valid @RequestBody ReservationsDTO newReservation, @PathVariable Long id) {
+        return reservationsService.newReservation(newReservation, id);
     }
 
-    @PutMapping("/reservations/{id}")
-    public ResponseEntity<Reservations> updateReservation(@Valid @RequestBody Reservations updatedReservation, @PathVariable Long id){
-        var reservation = reservationsService.updateReservation(updatedReservation, id);
-        return ResponseEntity.ok().body(reservation);
+    @PutMapping("/{id}")
+    ReservationsDTO updateReservation(@Valid @RequestBody ReservationsDTO updatedReservation, @PathVariable Long id){
+        return reservationsService.updateReservation(updatedReservation, id);
     }
 
-    @DeleteMapping("/reservations/{id}")
-    public void deleteReservation (@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    void deleteReservation (@PathVariable Long id){
         reservationsService.deleteReservation(id);
     }
 

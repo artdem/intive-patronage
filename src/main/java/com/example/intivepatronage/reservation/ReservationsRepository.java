@@ -8,4 +8,6 @@ public interface ReservationsRepository extends JpaRepository<Reservations, Long
 
     boolean existsReservationByReservationName(String name);
 
+    Reservations findByReservationName(String name);
+
 }

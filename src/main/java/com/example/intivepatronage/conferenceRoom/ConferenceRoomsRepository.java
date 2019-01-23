@@ -8,4 +8,6 @@ public interface ConferenceRoomsRepository extends JpaRepository<ConferenceRooms
 
     boolean existsConferenceRoomByConferenceRoomName(String name);
 
+    ConferenceRooms findByConferenceRoomName(String name);
+
 }

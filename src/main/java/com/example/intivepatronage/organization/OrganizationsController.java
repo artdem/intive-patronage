@@ -8,43 +8,40 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class OrganizationsController {
+@RequestMapping("/organizations")
+class OrganizationsController {
 
     private final OrganizationsService organizationsService;
 
     @Autowired
-    public OrganizationsController(OrganizationsService organizationsService) {
+    OrganizationsController(OrganizationsService organizationsService) {
         this.organizationsService = organizationsService;
     }
 
-    @GetMapping("/organizations")
-    public List<Organizations> allOrganizations(){
+    @GetMapping
+    List<OrganizationsDTO> allOrganizations(){
         return organizationsService.allOrganizations();
     }
 
-    @GetMapping("/organizations/{id}")
-    public ResponseEntity<Organizations> singleOrganization(@PathVariable Long id){
-        var organization = organizationsService.organizationById(id);
-        if (organization != null){
-            return ResponseEntity.ok(organization);
-        }
-        return ResponseEntity.notFound().build();
+    @GetMapping("/{id}")
+    OrganizationsDTO singleOrganization(@PathVariable Long id){
+        return organizationsService.organizationById(id);
+        //return organizationDTO;
     }
 
-    @PostMapping("/organizations")
-    public ResponseEntity<Organizations> newOrganization(@Valid @RequestBody Organizations organization){
-        organizationsService.newOrganization(organization);
-        return ResponseEntity.ok().body(organization);
+    @PostMapping
+    ResponseEntity<OrganizationsDTO> newOrganization(@Valid @RequestBody OrganizationsDTO organizationDTO){
+        return ResponseEntity.ok().body(organizationsService.newOrganization(organizationDTO));
     }
 
-    @PutMapping("/organizations/{id}")
-    public ResponseEntity<Organizations> updateOrganization(@PathVariable Long id, @Valid @RequestBody Organizations updatedOrganization){
-        var organization = organizationsService.updateOrganization(updatedOrganization, id);
-        return ResponseEntity.ok().body(organization);
+    @PutMapping("/{id}")
+    ResponseEntity<OrganizationsDTO> updateOrganization(@PathVariable Long id, @Valid @RequestBody OrganizationsDTO updatedOrganizationDTO){
+        return ResponseEntity.ok().body(organizationsService.updateOrganization(updatedOrganizationDTO, id));
     }
 
-    @DeleteMapping("/organizations/{id}")
-    public void deleteOrganization(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    void deleteOrganization(@PathVariable Long id){
         organizationsService.deleteOrganization(id);
     }
 

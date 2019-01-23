@@ -1,39 +1,33 @@
 package com.example.intivepatronage.reservation;
 
 import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Entity
-public class Reservations {
+public class ReservationsDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank(message = "User name must not be blank.")
     @Size(min = 2, max = 20, message = "User name must be between 2 and 20 characters.")
-    @Column(unique = true)
     private String reservationName;
 
+    @NotNull(message = "Please enter start date")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationStart;
 
+    @NotNull(message = "Please enter start date")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conferenceroom_id")
-    @JsonIgnore
-    private ConferenceRooms conferenceRoom;
+    ConferenceRooms conferenceRoom;
 
-    public Reservations() {
+    public ReservationsDTO() {
     }
 
     public Long getId() {
@@ -75,5 +69,4 @@ public class Reservations {
     public void setConferenceRoom(ConferenceRooms conferenceRoom) {
         this.conferenceRoom = conferenceRoom;
     }
-
 }

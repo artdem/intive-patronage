@@ -2,38 +2,33 @@ package com.example.intivepatronage.conferenceRoom;
 
 import com.example.intivepatronage.organization.Organizations;
 import com.example.intivepatronage.reservation.Reservations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 
-@Entity
-@Table(name = "ConferenceRooms")
-public class ConferenceRooms {
+public class ConferenceRoomsDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
+    @NotBlank(message = "Conference room name must not be blank.")
+    @Size(min = 2, max = 20, message = "Conference room name must be between 2 and 20 characters.")
     private String conferenceRoomName;
 
+    @NotNull
+    @Min(value = 0, message = "Floor cannot be below 0.")
+    @Max(value = 10, message = "Floor cannot be above 10.")
     private int floor;
 
     private boolean booked = false;
 
+    @NotNull
     private int seats;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private List<Reservations> reservations;
+    public List<Reservations> reservations;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "organization_id")
-    @JsonIgnore
     private Organizations organization;
 
-    public ConferenceRooms() {
+    public ConferenceRoomsDTO() {
     }
 
     public Long getId() {
@@ -89,15 +84,6 @@ public class ConferenceRooms {
     }
 
     public void setOrganization(Organizations organization) {
-        this.organization = organization;
-    }
-
-    public ConferenceRooms(String conferenceRoomName, int floor, boolean booked, int seats, List<Reservations> reservations, Organizations organization) {
-        this.conferenceRoomName = conferenceRoomName;
-        this.floor = floor;
-        this.booked = booked;
-        this.seats = seats;
-        this.reservations = reservations;
         this.organization = organization;
     }
 }

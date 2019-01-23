@@ -2,54 +2,65 @@ package com.example.intivepatronage.organization;
 
 import com.example.intivepatronage.exceptions.UniqueNameException;
 import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizationsService {
 
     private final OrganizationsRepository organizationsRepository;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public OrganizationsService(OrganizationsRepository organizationsRepository) {
+    public OrganizationsService(OrganizationsRepository organizationsRepository, ObjectMapper objectMapper) {
         this.organizationsRepository = organizationsRepository;
+        this.objectMapper = objectMapper;
     }
 
-    public List<Organizations> allOrganizations() {
-        return organizationsRepository.findAll();
+    List<OrganizationsDTO> allOrganizations() {
+        return organizationsRepository.findAll().stream()
+                .map(organizations -> convertToDto(organizations))
+                .collect(Collectors.toList());
     }
 
-    public Organizations organizationById(Long id) throws OrganizationNotFoundException {
+    OrganizationsDTO organizationById(Long id) throws OrganizationNotFoundException {
         var organizationById = organizationsRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(id));
-        return organizationById;
+        return convertToDto(organizationById);
     }
 
-    public void newOrganization(Organizations organization) throws UniqueNameException {
-        if (!organizationsRepository.existsOrganizationByOrganizationName(organization.getOrganizationName())) {
-            organizationsRepository.save(organization);
-        } else {
+    OrganizationsDTO newOrganization(OrganizationsDTO newOrganization) throws UniqueNameException {
+        if (organizationsRepository.existsOrganizationByOrganizationName(newOrganization.getOrganizationName())) {
             throw new UniqueNameException();
         }
+        return convertToDto(organizationsRepository.save(convertToEntity(newOrganization)));
     }
 
-    public Organizations updateOrganization(Organizations updatedOrganization, Long id) throws UniqueNameException, OrganizationNotFoundException {
-        if (!organizationsRepository.existsOrganizationByOrganizationName(updatedOrganization.getOrganizationName())) {
-            return organizationsRepository.findById(id)
-                    .map(organization -> {
-                        organization.setOrganizationName(updatedOrganization.getOrganizationName());
-                        return organizationsRepository.save(organization);
-                    })
-                    .orElseThrow(() -> new OrganizationNotFoundException(id));
-        } else {
+    OrganizationsDTO updateOrganization(OrganizationsDTO organizationUpdate, Long id) throws UniqueNameException, OrganizationNotFoundException {
+        var organizationName = organizationUpdate.getOrganizationName();
+        if (organizationsRepository.existsOrganizationByOrganizationName(organizationName) && !id.equals(organizationsRepository.findByOrganizationName(organizationName).getId())) {
             throw new UniqueNameException();
         }
+        var organizationToUpdate = convertToEntity(convertToDto(organizationsRepository.findById(id)
+                .orElseThrow(() -> new OrganizationNotFoundException(id))));
+        organizationToUpdate.setOrganizationName(organizationUpdate.getOrganizationName());
+        return convertToDto(organizationsRepository.save(organizationToUpdate));
     }
 
-    public void deleteOrganization(Long id) {
+    void deleteOrganization(Long id) {
         organizationsRepository.deleteById(id);
+    }
+
+    private OrganizationsDTO convertToDto(Organizations organizations) {
+        return objectMapper.convertValue(organizations, OrganizationsDTO.class);
+    }
+
+    private Organizations convertToEntity(OrganizationsDTO organizationsDTO) {
+        return objectMapper.convertValue(organizationsDTO, Organizations.class);
     }
 
 }

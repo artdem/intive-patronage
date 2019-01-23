@@ -2,27 +2,21 @@ package com.example.intivepatronage.organization;
 
 import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
-@Entity
-@Table(name = "Organizations")
-public class Organizations {
+public class OrganizationsDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
+    @NotBlank(message = "Organizations name must not be blank.")
+    @Size(min = 2, max = 20, message = "Organizations name must be between 2 and 20 characters.")
     private String organizationName;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            mappedBy = "organization")
     private List<ConferenceRooms> conferenceRoomsList;
 
-    public Organizations() {
+    public OrganizationsDTO() {
     }
 
     public Long getId() {
@@ -49,8 +43,7 @@ public class Organizations {
         this.conferenceRoomsList = conferenceRoomsList;
     }
 
-    public Organizations(String organizationName, List<ConferenceRooms> conferenceRoomsList) {
-        this.organizationName = organizationName;
-        this.conferenceRoomsList = conferenceRoomsList;
+    public void addConferenceRoom(ConferenceRooms conferenceRoom){
+        conferenceRoomsList.add(conferenceRoom);
     }
 }

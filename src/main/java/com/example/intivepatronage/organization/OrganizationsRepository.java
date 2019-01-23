@@ -8,4 +8,6 @@ public interface OrganizationsRepository extends JpaRepository<Organizations, Lo
 
     boolean existsOrganizationByOrganizationName(String name);
 
+    Organizations findByOrganizationName(String name);
+
 }

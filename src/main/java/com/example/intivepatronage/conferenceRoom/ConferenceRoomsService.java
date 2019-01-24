@@ -5,7 +5,6 @@ import com.example.intivepatronage.exceptions.ConferenceRoomNotFoundException;
 import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
 import com.example.intivepatronage.organization.OrganizationsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +17,6 @@ public class ConferenceRoomsService {
     private final OrganizationsRepository organizationsRepository;
     private final ObjectMapper objectMapper;
 
-    @Autowired
     public ConferenceRoomsService(ConferenceRoomsRepository conferenceRoomsRepository, OrganizationsRepository organizationsRepository, ObjectMapper objectMapper) {
         this.conferenceRoomsRepository = conferenceRoomsRepository;
         this.organizationsRepository = organizationsRepository;

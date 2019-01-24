@@ -3,8 +3,6 @@ package com.example.intivepatronage.organization;
 import com.example.intivepatronage.exceptions.UniqueNameException;
 import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +14,6 @@ public class OrganizationsService {
     private final OrganizationsRepository organizationsRepository;
     private final ObjectMapper objectMapper;
 
-    @Autowired
     public OrganizationsService(OrganizationsRepository organizationsRepository, ObjectMapper objectMapper) {
         this.organizationsRepository = organizationsRepository;
         this.objectMapper = objectMapper;
@@ -24,7 +21,7 @@ public class OrganizationsService {
 
     List<OrganizationsDTO> allOrganizations() {
         return organizationsRepository.findAll().stream()
-                .map(organizations -> convertToDto(organizations))
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 

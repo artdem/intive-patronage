@@ -1,6 +1,5 @@
 package com.example.intivepatronage.reservation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,7 +11,6 @@ class ReservationsController {
 
     private final ReservationsService reservationsService;
 
-    @Autowired
     ReservationsController(ReservationsService reservationsService) {
         this.reservationsService = reservationsService;
     }

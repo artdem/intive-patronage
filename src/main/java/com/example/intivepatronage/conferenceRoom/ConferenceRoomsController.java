@@ -1,7 +1,5 @@
 package com.example.intivepatronage.conferenceRoom;
 
-import com.example.intivepatronage.exceptions.ConferenceRoomNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,7 +11,6 @@ class ConferenceRoomsController {
 
     private final ConferenceRoomsService conferenceRoomsService;
 
-    @Autowired
     ConferenceRoomsController(ConferenceRoomsService conferenceRoomsService) {
         this.conferenceRoomsService = conferenceRoomsService;
     }

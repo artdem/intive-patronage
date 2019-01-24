@@ -1,7 +1,5 @@
 package com.example.intivepatronage.organization;
 
-import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,7 +11,6 @@ class OrganizationsController {
 
     private final OrganizationsService organizationsService;
 
-    @Autowired
     OrganizationsController(OrganizationsService organizationsService) {
         this.organizationsService = organizationsService;
     }

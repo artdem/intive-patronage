@@ -3,7 +3,6 @@ package com.example.intivepatronage.reservation;
 import com.example.intivepatronage.exceptions.*;
 import com.example.intivepatronage.conferenceRoom.ConferenceRoomsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class ReservationsService {
     private final ObjectMapper objectMapper;
     private ReservationsValidator validator;
 
-    @Autowired
     public ReservationsService(ReservationsRepository reservationsRepository, ConferenceRoomsRepository conferenceRoomsRepository, ObjectMapper objectMapper, ReservationsValidator validator) {
         this.reservationsRepository = reservationsRepository;
         this.conferenceRoomsRepository = conferenceRoomsRepository;

@@ -4,7 +4,6 @@ import com.example.intivepatronage.conferenceRoom.ConferenceRoomsRepository;
 import com.example.intivepatronage.exceptions.ConferenceRoomAlreadyBookedException;
 import com.example.intivepatronage.exceptions.IllegalStartEndTimeException;
 import com.example.intivepatronage.exceptions.ReservationDurationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -17,7 +16,6 @@ class ReservationsValidator {
     private final int MIN_RESERVATION_TIME = 5;
     private final int MAX_RESERVATION_TIME = 120;
 
-    @Autowired
     ReservationsValidator(ConferenceRoomsRepository conferenceRoomsRepository) {
         this.conferenceRoomsRepository = conferenceRoomsRepository;
     }

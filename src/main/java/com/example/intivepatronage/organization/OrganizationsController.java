@@ -1,7 +1,6 @@
 package com.example.intivepatronage.organization;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,27 +17,27 @@ class OrganizationsController {
         this.organizationsService = organizationsService;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     List<OrganizationsDTO> allOrganizations(){
         return organizationsService.allOrganizations();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/list/{id}")
     OrganizationsDTO singleOrganization(@PathVariable Long id){
         return organizationsService.organizationById(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     OrganizationsDTO newOrganization(@Valid @RequestBody OrganizationsDTO organizationDTO){
         return organizationsService.newOrganization(organizationDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     OrganizationsDTO updateOrganization(@PathVariable Long id, @Valid @RequestBody OrganizationsDTO updatedOrganizationDTO){
         return organizationsService.updateOrganization(updatedOrganizationDTO, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     void deleteOrganization(@PathVariable Long id){
         organizationsService.deleteOrganization(id);
     }

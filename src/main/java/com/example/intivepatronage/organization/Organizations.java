@@ -1,9 +1,9 @@
 package com.example.intivepatronage.organization;
 
 import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -16,6 +16,13 @@ public class Organizations {
 
     @Column(unique = true)
     private String organizationName;
+
+    @OneToMany(targetEntity = ConferenceRooms.class,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "organization")
+    @JsonIgnoreProperties("organization")
+    private List<ConferenceRooms> conferenceRoomsList;
 
     public Organizations() {
     }
@@ -36,4 +43,11 @@ public class Organizations {
         this.organizationName = organizationName;
     }
 
+    public List<ConferenceRooms> getConferenceRoomsList() {
+        return conferenceRoomsList;
+    }
+
+    public void setConferenceRoomsList(List<ConferenceRooms> conferenceRoomsList) {
+        this.conferenceRoomsList = conferenceRoomsList;
+    }
 }

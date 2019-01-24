@@ -18,27 +18,27 @@ class ConferenceRoomsController {
         this.conferenceRoomsService = conferenceRoomsService;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     List<ConferenceRoomsDTO> allConferenceRooms() {
         return conferenceRoomsService.allConferenceRooms();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/list/{id}")
     ConferenceRoomsDTO conferenceRoomById(@PathVariable Long id) {
         return conferenceRoomsService.conferenceRoomById(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     ConferenceRoomsDTO addConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO newConferenceRoom) {
         return conferenceRoomsService.newConferenceRoom(newConferenceRoom);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     ConferenceRoomsDTO updateConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO updatedConferenceRoom, @PathVariable Long id) {
         return conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     void deleteConferenceRoom(@PathVariable Long id) throws ConferenceRoomNotFoundException {
         conferenceRoomsService.deleteConferenceRoom(id);
     }

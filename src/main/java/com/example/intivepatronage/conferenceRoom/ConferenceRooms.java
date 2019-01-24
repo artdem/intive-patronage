@@ -1,11 +1,9 @@
 package com.example.intivepatronage.conferenceRoom;
 
 import com.example.intivepatronage.organization.Organizations;
-import com.example.intivepatronage.reservation.Reservations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "ConferenceRooms")
@@ -23,6 +21,13 @@ public class ConferenceRooms {
     private boolean booked = false;
 
     private int seats;
+
+    private transient Long organizationId;
+
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    @JsonIgnoreProperties("conferenceRoomsList")
+    private Organizations organization;
 
     public ConferenceRooms() {
     }
@@ -67,4 +72,19 @@ public class ConferenceRooms {
         this.seats = seats;
     }
 
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public Organizations getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organizations organization) {
+        this.organization = organization;
+    }
 }

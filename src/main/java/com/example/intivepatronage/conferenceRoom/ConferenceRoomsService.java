@@ -3,8 +3,6 @@ package com.example.intivepatronage.conferenceRoom;
 import com.example.intivepatronage.exceptions.UniqueNameException;
 import com.example.intivepatronage.exceptions.ConferenceRoomNotFoundException;
 import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
-import com.example.intivepatronage.organization.Organizations;
-import com.example.intivepatronage.organization.OrganizationsDTO;
 import com.example.intivepatronage.organization.OrganizationsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +42,8 @@ public class ConferenceRoomsService {
         if (conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(conferenceRoomName)) {
             throw new UniqueNameException();
         }
+        newConferenceRoom.setOrganization(organizationsRepository.findById(newConferenceRoom.getOrganizationId())
+                .orElseThrow(()-> new OrganizationNotFoundException(newConferenceRoom.getOrganizationId())));
         return convertToDto(conferenceRoomsRepository.save(convertToEntity(newConferenceRoom)));
     }
 

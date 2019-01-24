@@ -1,7 +1,10 @@
 package com.example.intivepatronage.organization;
 
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class OrganizationsDTO {
 
@@ -10,6 +13,8 @@ public class OrganizationsDTO {
     @NotBlank(message = "Organizations name must not be blank.")
     @Size(min = 2, max = 20, message = "Organizations name must be between 2 and 20 characters.")
     private String organizationName;
+
+    private List<ConferenceRooms> conferenceRoomsList;
 
     public OrganizationsDTO() {
     }
@@ -30,4 +35,11 @@ public class OrganizationsDTO {
         this.organizationName = organizationName;
     }
 
+    public List<ConferenceRooms> getConferenceRoomsList() {
+        return conferenceRoomsList;
+    }
+
+    public void setConferenceRoomsList(List<ConferenceRooms> conferenceRoomsList) {
+        this.conferenceRoomsList = conferenceRoomsList;
+    }
 }

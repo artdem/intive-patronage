@@ -1,5 +1,7 @@
 package com.example.intivepatronage.conferenceRoom;
 
+import com.example.intivepatronage.organization.Organizations;
+
 import javax.validation.constraints.*;
 
 public class ConferenceRoomsDTO {
@@ -19,6 +21,10 @@ public class ConferenceRoomsDTO {
 
     @NotNull
     private int seats;
+
+    private transient Long organizationId;
+
+    private Organizations organization;
 
     public ConferenceRoomsDTO() {
     }
@@ -63,4 +69,19 @@ public class ConferenceRoomsDTO {
         this.seats = seats;
     }
 
+    public Organizations getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organizations organization) {
+        this.organization = organization;
+    }
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 }

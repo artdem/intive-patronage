@@ -1,5 +1,6 @@
 package com.example.intivepatronage.reservation;
 
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ReservationsDTO {
 
@@ -23,6 +25,10 @@ public class ReservationsDTO {
     @NotNull(message = "Please enter start date")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
+
+    private transient Long conferenceRoomId;
+
+    private ConferenceRooms conferenceRoom;
 
     public ReservationsDTO() {
     }
@@ -59,4 +65,19 @@ public class ReservationsDTO {
         this.reservationEnd = reservationEnd;
     }
 
+    public ConferenceRooms getConferenceRoom() {
+        return conferenceRoom;
+    }
+
+    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
+        this.conferenceRoom = conferenceRoom;
+    }
+
+    public Long getConferenceRoomId() {
+        return conferenceRoomId;
+    }
+
+    public void setConferenceRoomId(Long conferenceRoomId) {
+        this.conferenceRoomId = conferenceRoomId;
+    }
 }

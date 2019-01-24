@@ -1,8 +1,10 @@
 package com.example.intivepatronage.conferenceRoom;
 
 import com.example.intivepatronage.organization.Organizations;
+import com.example.intivepatronage.reservation.Reservations;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 public class ConferenceRoomsDTO {
 
@@ -25,6 +27,8 @@ public class ConferenceRoomsDTO {
     private transient Long organizationId;
 
     private Organizations organization;
+
+    private List<Reservations> reservationsList;
 
     public ConferenceRoomsDTO() {
     }
@@ -83,5 +87,13 @@ public class ConferenceRoomsDTO {
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public List<Reservations> getReservationsList() {
+        return reservationsList;
+    }
+
+    public void setReservationsList(List<Reservations> reservationsList) {
+        this.reservationsList = reservationsList;
     }
 }

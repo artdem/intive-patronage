@@ -41,7 +41,8 @@ public class ReservationsService {
         if (reservationsRepository.existsReservationByReservationName(newReservation.getReservationName())) {
             throw new UniqueNameException();
         }
-        //var reservation = reservationBuilder(newReservation);
+        newReservation.setConferenceRoom(conferenceRoomsRepository.findById(newReservation.getConferenceRoomId())
+                .orElseThrow(() -> new ConferenceRoomNotFoundException(newReservation.getConferenceRoomId())));
         return convertToDto(reservationsRepository.save(convertToEntity(newReservation)));
     }
 
@@ -52,7 +53,7 @@ public class ReservationsService {
             throw new UniqueNameException();
         }
         var reservationToUpdate = convertToDto(reservationsRepository.findById(id)
-                .orElseThrow(()-> new ReservationNotFoundException(id)));
+                .orElseThrow(() -> new ReservationNotFoundException(id)));
         return convertToDto(reservationsRepository.save(convertToEntity(reservationUpdater(reservationUpdate, reservationToUpdate))));
     }
 

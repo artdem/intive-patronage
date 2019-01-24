@@ -1,6 +1,5 @@
 package com.example.intivepatronage.reservation;
 
-import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.example.intivepatronage.conferenceRoom.ConferenceRoomsRepository;
 import com.example.intivepatronage.exceptions.ConferenceRoomAlreadyBookedException;
 import com.example.intivepatronage.exceptions.IllegalStartEndTimeException;
@@ -15,6 +14,8 @@ import java.time.temporal.ChronoUnit;
 class ReservationsValidator {
 
     private final ConferenceRoomsRepository conferenceRoomsRepository;
+    private final int MIN_RESERVATION_TIME = 5;
+    private final int MAX_RESERVATION_TIME = 120;
 
     @Autowired
     ReservationsValidator(ConferenceRoomsRepository conferenceRoomsRepository) {
@@ -32,18 +33,22 @@ class ReservationsValidator {
     void checkReservationDuration(ReservationsDTO newReservation) throws ReservationDurationException {
         var duration = Duration.between(newReservation.getReservationEnd(), newReservation.getReservationStart());
         var difference = Math.abs(duration.toMinutes());
-        if (120 < difference || difference <= 5) {
+        if (MAX_RESERVATION_TIME < difference || difference <= MIN_RESERVATION_TIME) {
             throw new ReservationDurationException();
         }
     }
 
-/*    void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
+    void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
         conferenceRoomsRepository.findById(id).ifPresent(conferenceRooms -> {
-            if(conferenceRooms.getReservations().stream().anyMatch(reservation -> ((newReservation.getReservationStart().isAfter(reservation.getReservationStart()) && (newReservation.getReservationStart().isBefore(reservation.getReservationEnd()))) ||
-                    (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
-                    ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))))){
+            if(conferenceRooms.getReservationsList().stream()
+                    .anyMatch(reservation -> (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
+                                    (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
+                                    (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
+                                    (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
+                                    ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))
+                    )){
                 throw new ConferenceRoomAlreadyBookedException();
             }
         });
-    }*/
+    }
 }

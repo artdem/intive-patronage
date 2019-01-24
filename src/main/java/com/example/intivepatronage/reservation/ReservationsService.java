@@ -48,8 +48,8 @@ public class ReservationsService {
 
     ReservationsDTO updateReservation(ReservationsDTO reservationUpdate, Long id) throws UniqueNameException, ReservationNotFoundException {
         var reservationName = reservationUpdate.getReservationName();
-        var reservationId = reservationsRepository.findByReservationName(reservationName).getId();
-        if (reservationsRepository.existsReservationByReservationName(reservationName) && !id.equals(reservationId)) {
+        var reservationId = convertToDto(reservationsRepository.findByReservationName(reservationName));
+        if (reservationsRepository.existsReservationByReservationName(reservationName) && !reservationId.getId().equals(id)) {
             throw new UniqueNameException();
         }
         var reservationToUpdate = convertToDto(reservationsRepository.findById(id)

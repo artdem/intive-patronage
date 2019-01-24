@@ -1,5 +1,6 @@
 package com.example.intivepatronage.organization;
 
+import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +34,13 @@ class OrganizationsController {
     }
 
     @PutMapping("/{id}")
-    OrganizationsDTO updateOrganization(@PathVariable Long id, @Valid @RequestBody OrganizationsDTO updatedOrganizationDTO){
+    OrganizationsDTO updateOrganization(@Valid @RequestBody OrganizationsDTO updatedOrganizationDTO, @PathVariable Long id){
         return organizationsService.updateOrganization(updatedOrganizationDTO, id);
     }
 
     @DeleteMapping("/{id}")
-    void deleteOrganization(@PathVariable Long id){
-        organizationsService.deleteOrganization(id);
+    String deleteOrganization(@PathVariable Long id) {
+        return organizationsService.deleteOrganization(id);
     }
 
 }

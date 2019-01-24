@@ -39,8 +39,8 @@ class ConferenceRoomsController {
     }
 
     @DeleteMapping("/{id}")
-    void deleteConferenceRoom(@PathVariable Long id) throws ConferenceRoomNotFoundException {
-        conferenceRoomsService.deleteConferenceRoom(id);
+    String deleteConferenceRoom(@PathVariable Long id) {
+        return (conferenceRoomsService.deleteConferenceRoom(id));
     }
 
 

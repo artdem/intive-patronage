@@ -3,6 +3,7 @@ package com.example.intivepatronage.organization;
 import com.example.intivepatronage.exceptions.UniqueNameException;
 import com.example.intivepatronage.exceptions.OrganizationNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,18 +43,19 @@ public class OrganizationsService {
 
     OrganizationsDTO updateOrganization(OrganizationsDTO organizationUpdate, Long id) throws UniqueNameException, OrganizationNotFoundException {
         var organizationName = organizationUpdate.getOrganizationName();
-        var organizationId = organizationsRepository.findByOrganizationName(organizationName).getId();
-        if (organizationsRepository.existsOrganizationByOrganizationName(organizationName) && !id.equals(organizationId)) {
+        var organizationId = convertToDto(organizationsRepository.findByOrganizationName(organizationName));
+        if (organizationsRepository.existsOrganizationByOrganizationName(organizationName) && !organizationId.getId().equals(id)) {
             throw new UniqueNameException();
         }
-        var organizationToUpdate = convertToEntity(convertToDto(organizationsRepository.findById(id)
-                .orElseThrow(() -> new OrganizationNotFoundException(id))));
+        Organizations organizationToUpdate = organizationsRepository.findById(id)
+                .orElseThrow(() -> new OrganizationNotFoundException(id));
         organizationToUpdate.setOrganizationName(organizationUpdate.getOrganizationName());
         return convertToDto(organizationsRepository.save(organizationToUpdate));
     }
 
-    void deleteOrganization(Long id) {
+    String deleteOrganization(Long id) throws OrganizationNotFoundException {
         organizationsRepository.deleteById(id);
+        return "Organization no. " + id + " successfully deleted.";
     }
 
     private OrganizationsDTO convertToDto(Organizations organizations) {

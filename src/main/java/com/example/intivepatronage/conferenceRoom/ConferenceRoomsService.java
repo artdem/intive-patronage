@@ -29,7 +29,7 @@ public class ConferenceRoomsService {
 
     List<ConferenceRoomsDTO> allConferenceRooms() {
         return conferenceRoomsRepository.findAll().stream()
-                .map(conferenceRoom -> convertToDto(conferenceRoom))
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -47,19 +47,10 @@ public class ConferenceRoomsService {
         return convertToDto(conferenceRoomsRepository.save(convertToEntity(newConferenceRoom)));
     }
 
-    ConferenceRoomsDTO newConferenceRoomWithOrganization(ConferenceRoomsDTO newConferenceRoom, Long id) throws OrganizationNotFoundException, UniqueNameException {
-        var conferenceRoomName = newConferenceRoom.getConferenceRoomName();
-        if (conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(conferenceRoomName)) {
-            throw new UniqueNameException();
-        }
-        var organization = convertToDto(organizationsRepository.findById(id).orElseThrow(()-> new OrganizationNotFoundException(id)));
-        conferenceRoomsBuilder(newConferenceRoom, organization);
-        return convertToDto(conferenceRoomsRepository.save(convertToEntity(newConferenceRoom)));
-    }
-
     ConferenceRoomsDTO updateConferenceRoom(ConferenceRoomsDTO conferenceRoomUpdate, Long id) throws UniqueNameException, ConferenceRoomNotFoundException {
         var conferenceRoomName = conferenceRoomUpdate.getConferenceRoomName();
-        if (conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(conferenceRoomName) && !id.equals(conferenceRoomsRepository.findByConferenceRoomName(conferenceRoomName).getId())) {
+        var conferenceRoomId = conferenceRoomsRepository.findByConferenceRoomName(conferenceRoomName).getId();
+        if (conferenceRoomsRepository.existsConferenceRoomByConferenceRoomName(conferenceRoomName) && !id.equals(conferenceRoomId)) {
             throw new UniqueNameException();
         }
         var conferenceRoomToUpdate = convertToDto(conferenceRoomsRepository.findById(id)
@@ -78,26 +69,12 @@ public class ConferenceRoomsService {
         return conferenceRoomToUpdate;
     }
 
-    private ConferenceRoomsDTO conferenceRoomsBuilder(ConferenceRoomsDTO conferenceRooms, OrganizationsDTO organization){
-        organization.getConferenceRoomsList().add(convertToEntity(conferenceRooms));
-        conferenceRooms.setOrganization(convertToEntity(organization));
-        return conferenceRooms;
-    }
-
     private ConferenceRoomsDTO convertToDto(ConferenceRooms conferenceRoom) {
         return objectMapper.convertValue(conferenceRoom, ConferenceRoomsDTO.class);
     }
 
     private ConferenceRooms convertToEntity(ConferenceRoomsDTO conferenceRoomDTO) {
         return objectMapper.convertValue(conferenceRoomDTO, ConferenceRooms.class);
-    }
-
-    private OrganizationsDTO convertToDto(Organizations organizations) {
-        return objectMapper.convertValue(organizations, OrganizationsDTO.class);
-    }
-
-    private Organizations convertToEntity(OrganizationsDTO organizationsDTO) {
-        return objectMapper.convertValue(organizationsDTO, Organizations.class);
     }
 
 }

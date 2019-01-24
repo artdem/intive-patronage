@@ -26,21 +26,19 @@ class OrganizationsController {
     @GetMapping("/{id}")
     OrganizationsDTO singleOrganization(@PathVariable Long id){
         return organizationsService.organizationById(id);
-        //return organizationDTO;
     }
 
     @PostMapping
-    ResponseEntity<OrganizationsDTO> newOrganization(@Valid @RequestBody OrganizationsDTO organizationDTO){
-        return ResponseEntity.ok().body(organizationsService.newOrganization(organizationDTO));
+    OrganizationsDTO newOrganization(@Valid @RequestBody OrganizationsDTO organizationDTO){
+        return organizationsService.newOrganization(organizationDTO);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<OrganizationsDTO> updateOrganization(@PathVariable Long id, @Valid @RequestBody OrganizationsDTO updatedOrganizationDTO){
-        return ResponseEntity.ok().body(organizationsService.updateOrganization(updatedOrganizationDTO, id));
+    OrganizationsDTO updateOrganization(@PathVariable Long id, @Valid @RequestBody OrganizationsDTO updatedOrganizationDTO){
+        return organizationsService.updateOrganization(updatedOrganizationDTO, id);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
     void deleteOrganization(@PathVariable Long id){
         organizationsService.deleteOrganization(id);
     }

@@ -24,15 +24,6 @@ public class ConferenceRooms {
 
     private int seats;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private List<Reservations> reservations;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "organization_id")
-    @JsonIgnore
-    private Organizations organization;
-
     public ConferenceRooms() {
     }
 
@@ -76,28 +67,4 @@ public class ConferenceRooms {
         this.seats = seats;
     }
 
-    public List<Reservations> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservations> reservations) {
-        this.reservations = reservations;
-    }
-
-    public Organizations getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organizations organization) {
-        this.organization = organization;
-    }
-
-    public ConferenceRooms(String conferenceRoomName, int floor, boolean booked, int seats, List<Reservations> reservations, Organizations organization) {
-        this.conferenceRoomName = conferenceRoomName;
-        this.floor = floor;
-        this.booked = booked;
-        this.seats = seats;
-        this.reservations = reservations;
-        this.organization = organization;
-    }
 }

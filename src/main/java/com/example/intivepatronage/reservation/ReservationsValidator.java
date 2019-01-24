@@ -37,7 +37,7 @@ class ReservationsValidator {
         }
     }
 
-    void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
+/*    void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
         conferenceRoomsRepository.findById(id).ifPresent(conferenceRooms -> {
             if(conferenceRooms.getReservations().stream().anyMatch(reservation -> ((newReservation.getReservationStart().isAfter(reservation.getReservationStart()) && (newReservation.getReservationStart().isBefore(reservation.getReservationEnd()))) ||
                     (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
@@ -45,5 +45,5 @@ class ReservationsValidator {
                 throw new ConferenceRoomAlreadyBookedException();
             }
         });
-    }
+    }*/
 }

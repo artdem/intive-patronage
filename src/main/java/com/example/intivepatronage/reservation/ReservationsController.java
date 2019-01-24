@@ -27,14 +27,14 @@ class ReservationsController {
         return reservationsService.reservationById(id);
     }
 
-    @PostMapping("/{id}")
-    ReservationsDTO newReservationWithConferenceRoom(@Valid @RequestBody ReservationsDTO newReservation, @PathVariable Long id) {
-        return reservationsService.newReservation(newReservation, id);
+    @PostMapping
+    ReservationsDTO newReservationWithConferenceRoom(@Valid @RequestBody ReservationsDTO newReservation) {
+        return reservationsService.newReservation(newReservation);
     }
 
     @PutMapping("/{id}")
-    ReservationsDTO updateReservation(@Valid @RequestBody ReservationsDTO updatedReservation, @PathVariable Long id){
-        return reservationsService.updateReservation(updatedReservation, id);
+    ReservationsDTO updateReservation(@Valid @RequestBody ReservationsDTO reservationUpdate, @PathVariable Long id){
+        return reservationsService.updateReservation(reservationUpdate, id);
     }
 
     @DeleteMapping("/{id}")

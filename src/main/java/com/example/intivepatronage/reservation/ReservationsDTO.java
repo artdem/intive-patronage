@@ -1,6 +1,5 @@
 package com.example.intivepatronage.reservation;
 
-import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
@@ -24,8 +23,6 @@ public class ReservationsDTO {
     @NotNull(message = "Please enter start date")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
-
-    ConferenceRooms conferenceRoom;
 
     public ReservationsDTO() {
     }
@@ -62,11 +59,4 @@ public class ReservationsDTO {
         this.reservationEnd = reservationEnd;
     }
 
-    public ConferenceRooms getConferenceRoom() {
-        return conferenceRoom;
-    }
-
-    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
-        this.conferenceRoom = conferenceRoom;
-    }
 }

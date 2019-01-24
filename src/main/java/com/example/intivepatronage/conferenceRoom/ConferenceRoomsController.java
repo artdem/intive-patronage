@@ -2,7 +2,6 @@ package com.example.intivepatronage.conferenceRoom;
 
 import com.example.intivepatronage.exceptions.ConferenceRoomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,18 +29,13 @@ class ConferenceRoomsController {
     }
 
     @PostMapping
-    ResponseEntity<ConferenceRoomsDTO> addConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO newConferenceRoom) {
-        return ResponseEntity.ok().body(conferenceRoomsService.newConferenceRoom(newConferenceRoom));
-    }
-
-    @PostMapping("/{organizationId}/organization")
-    ResponseEntity<ConferenceRoomsDTO> addConferenceRoomToOrganization(@Valid @RequestBody ConferenceRoomsDTO conferenceRoom, @PathVariable Long organizationId) {
-        return ResponseEntity.ok().body(conferenceRoomsService.newConferenceRoomWithOrganization(conferenceRoom, organizationId));
+    ConferenceRoomsDTO addConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO newConferenceRoom) {
+        return conferenceRoomsService.newConferenceRoom(newConferenceRoom);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ConferenceRoomsDTO> updateConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO updatedConferenceRoom, @PathVariable Long id) {
-        return ResponseEntity.ok().body(conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id));
+    ConferenceRoomsDTO updateConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO updatedConferenceRoom, @PathVariable Long id) {
+        return conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id);
     }
 
     @DeleteMapping("/{id}")

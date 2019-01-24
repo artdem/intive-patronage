@@ -1,7 +1,5 @@
 package com.example.intivepatronage.reservation;
 
-import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
@@ -27,11 +25,6 @@ public class Reservations {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conferenceroom_id")
-    @JsonIgnore
-    private ConferenceRooms conferenceRoom;
 
     public Reservations() {
     }
@@ -66,14 +59,6 @@ public class Reservations {
 
     public void setReservationEnd(LocalDateTime reservationEnd) {
         this.reservationEnd = reservationEnd;
-    }
-
-    public ConferenceRooms getConferenceRoom() {
-        return conferenceRoom;
-    }
-
-    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
-        this.conferenceRoom = conferenceRoom;
     }
 
 }

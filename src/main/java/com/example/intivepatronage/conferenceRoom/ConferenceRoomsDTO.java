@@ -1,10 +1,6 @@
 package com.example.intivepatronage.conferenceRoom;
 
-import com.example.intivepatronage.organization.Organizations;
-import com.example.intivepatronage.reservation.Reservations;
-
 import javax.validation.constraints.*;
-import java.util.List;
 
 public class ConferenceRoomsDTO {
 
@@ -23,10 +19,6 @@ public class ConferenceRoomsDTO {
 
     @NotNull
     private int seats;
-
-    public List<Reservations> reservations;
-
-    private Organizations organization;
 
     public ConferenceRoomsDTO() {
     }
@@ -71,19 +63,4 @@ public class ConferenceRoomsDTO {
         this.seats = seats;
     }
 
-    public List<Reservations> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservations> reservations) {
-        this.reservations = reservations;
-    }
-
-    public Organizations getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organizations organization) {
-        this.organization = organization;
-    }
 }

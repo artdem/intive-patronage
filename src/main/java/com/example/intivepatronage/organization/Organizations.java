@@ -17,11 +17,6 @@ public class Organizations {
     @Column(unique = true)
     private String organizationName;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            mappedBy = "organization")
-    private List<ConferenceRooms> conferenceRoomsList;
-
     public Organizations() {
     }
 
@@ -41,16 +36,4 @@ public class Organizations {
         this.organizationName = organizationName;
     }
 
-    public List<ConferenceRooms> getConferenceRoomsList() {
-        return conferenceRoomsList;
-    }
-
-    public void setConferenceRoomsList(List<ConferenceRooms> conferenceRoomsList) {
-        this.conferenceRoomsList = conferenceRoomsList;
-    }
-
-    public Organizations(String organizationName, List<ConferenceRooms> conferenceRoomsList) {
-        this.organizationName = organizationName;
-        this.conferenceRoomsList = conferenceRoomsList;
-    }
 }

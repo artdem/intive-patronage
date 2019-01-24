@@ -27,7 +27,7 @@ public class ReservationsService {
 
     List<ReservationsDTO> allReservations() {
         return reservationsRepository.findAll().stream()
-                .map(reservations -> convertToDto(reservations))
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -37,43 +37,47 @@ public class ReservationsService {
         return convertToDto(reservation);
     }
 
-    ReservationsDTO newReservation(ReservationsDTO newReservation, Long id) throws UniqueNameException, ConferenceRoomNotFoundException, ConferenceRoomAlreadyBookedException, IllegalStartEndTimeException, ReservationDurationException {
+    ReservationsDTO newReservation(ReservationsDTO newReservation) throws UniqueNameException, ConferenceRoomNotFoundException, ConferenceRoomAlreadyBookedException, IllegalStartEndTimeException, ReservationDurationException {
         if (reservationsRepository.existsReservationByReservationName(newReservation.getReservationName())) {
             throw new UniqueNameException();
         }
-        var reservation = reservationBuilder(newReservation, id);
-        return convertToDto(reservationsRepository.save(convertToEntity(reservation)));
+        //var reservation = reservationBuilder(newReservation);
+        return convertToDto(reservationsRepository.save(convertToEntity(newReservation)));
     }
 
-    ReservationsDTO updateReservation(ReservationsDTO reservationUpdate, Long id) throws
-            UniqueNameException, ReservationNotFoundException {
+    ReservationsDTO updateReservation(ReservationsDTO reservationUpdate, Long id) throws UniqueNameException, ReservationNotFoundException {
         var reservationName = reservationUpdate.getReservationName();
-        if (reservationsRepository.existsReservationByReservationName(reservationName) && !id.equals(reservationsRepository.findByReservationName(reservationName).getId())) {
+        var reservationId = reservationsRepository.findByReservationName(reservationName).getId();
+        if (reservationsRepository.existsReservationByReservationName(reservationName) && !id.equals(reservationId)) {
             throw new UniqueNameException();
         }
-        var updatedReservation = reservationUpdater(reservationUpdate, id);
-        return convertToDto(reservationsRepository.save(convertToEntity(updatedReservation)));
+        var reservationToUpdate = convertToDto(reservationsRepository.findById(id)
+                .orElseThrow(()-> new ReservationNotFoundException(id)));
+        return convertToDto(reservationsRepository.save(convertToEntity(reservationUpdater(reservationUpdate, reservationToUpdate))));
     }
 
-    private ReservationsDTO reservationUpdater(ReservationsDTO reservationUpdate, Long id) {
-        reservationsRepository.findById(id).ifPresentOrElse(reservation -> {
-            validator.checkReservationDate(reservationUpdate);
-            validator.checkReservationDuration(reservationUpdate);
-            validator.checkAvailability(reservationUpdate, reservation.getConferenceRoom().getId());
+    private ReservationsDTO reservationUpdater(ReservationsDTO reservationUpdate, ReservationsDTO reservationToUpdate) {
+        validator.checkReservationDate(reservationUpdate);
+        validator.checkReservationDuration(reservationUpdate);
+        reservationToUpdate.setReservationName(reservationUpdate.getReservationName());
+        reservationToUpdate.setReservationStart(reservationUpdate.getReservationStart());
+        reservationToUpdate.setReservationEnd(reservationUpdate.getReservationEnd());
+  /*      reservationsRepository.findById(id).ifPresentOrElse(reservation -> {
+            //validator.checkAvailability(reservationUpdate, reservation.getConferenceRoom().getId());
             reservation.setReservationName(reservationUpdate.getReservationName());
             reservation.setReservationStart(reservationUpdate.getReservationStart());
             reservation.setReservationEnd(reservationUpdate.getReservationEnd());
         }, () -> {
             throw new ReservationNotFoundException(id);
-        });
-        return reservationUpdate;
+        });*/
+        return reservationToUpdate;
     }
 
     void deleteReservation(Long id) {
         reservationsRepository.deleteById(id);
     }
 
-    private ReservationsDTO reservationBuilder(ReservationsDTO newReservation, Long id) throws ConferenceRoomNotFoundException {
+/*    private ReservationsDTO reservationBuilder(ReservationsDTO newReservation, Long id) throws ConferenceRoomNotFoundException {
         conferenceRoomsRepository.findById(id).ifPresentOrElse(conferenceRoom -> {
             newReservation.setConferenceRoom(conferenceRoom);
             validator.checkReservationDate(newReservation);
@@ -85,7 +89,7 @@ public class ReservationsService {
             throw new ConferenceRoomNotFoundException(id);
         });
         return newReservation;
-    }
+    }*/
 
     private ReservationsDTO convertToDto(Reservations reservations) {
         return objectMapper.convertValue(reservations, ReservationsDTO.class);

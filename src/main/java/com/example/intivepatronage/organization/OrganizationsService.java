@@ -42,7 +42,8 @@ public class OrganizationsService {
 
     OrganizationsDTO updateOrganization(OrganizationsDTO organizationUpdate, Long id) throws UniqueNameException, OrganizationNotFoundException {
         var organizationName = organizationUpdate.getOrganizationName();
-        if (organizationsRepository.existsOrganizationByOrganizationName(organizationName) && !id.equals(organizationsRepository.findByOrganizationName(organizationName).getId())) {
+        var organizationId = organizationsRepository.findByOrganizationName(organizationName).getId();
+        if (organizationsRepository.existsOrganizationByOrganizationName(organizationName) && !id.equals(organizationId)) {
             throw new UniqueNameException();
         }
         var organizationToUpdate = convertToEntity(convertToDto(organizationsRepository.findById(id)

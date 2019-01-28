@@ -25,20 +25,20 @@ public class OrganizationsService {
                 .collect(Collectors.toList());
     }
 
-    OrganizationsDTO organizationById(Long id) throws OrganizationNotFoundException {
+    OrganizationsDTO organizationById(Long id) {
         var organizationById = organizationsRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(id));
         return convertToDto(organizationById);
     }
 
-    OrganizationsDTO newOrganization(OrganizationsDTO newOrganization) throws UniqueNameException {
+    OrganizationsDTO newOrganization(OrganizationsDTO newOrganization) {
         if (organizationsRepository.existsOrganizationByOrganizationName(newOrganization.getOrganizationName())) {
             throw new UniqueNameException();
         }
         return convertToDto(organizationsRepository.save(convertToEntity(newOrganization)));
     }
 
-    OrganizationsDTO updateOrganization(OrganizationsDTO organizationUpdate, Long id) throws UniqueNameException, OrganizationNotFoundException {
+    OrganizationsDTO updateOrganization(OrganizationsDTO organizationUpdate, Long id) {
         var organizationName = organizationUpdate.getOrganizationName();
         var organizationId = convertToDto(organizationsRepository.findByOrganizationName(organizationName));
         if (organizationsRepository.existsOrganizationByOrganizationName(organizationName) && !organizationId.getId().equals(id)) {
@@ -50,7 +50,7 @@ public class OrganizationsService {
         return convertToDto(organizationsRepository.save(organizationToUpdate));
     }
 
-    String deleteOrganization(Long id) throws OrganizationNotFoundException {
+    String deleteOrganization(Long id) {
         organizationsRepository.deleteById(id);
         return "Organization no. " + id + " successfully deleted.";
     }

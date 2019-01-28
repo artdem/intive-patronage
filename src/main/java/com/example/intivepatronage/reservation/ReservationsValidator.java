@@ -19,13 +19,13 @@ class ReservationsValidator {
         this.conferenceRoomsRepository = conferenceRoomsRepository;
     }
 
-    private void checkDate(ReservationsDTO newReservation) throws IllegalStartEndTimeException {
+    private void checkDate(ReservationsDTO newReservation) {
         if (newReservation.getReservationStart().isAfter(newReservation.getReservationEnd())) {
             throw new IllegalStartEndTimeException();
         }
     }
 
-    private void checkDuration(ReservationsDTO newReservation) throws ReservationDurationException {
+    private void checkDuration(ReservationsDTO newReservation) {
         var duration = Duration.between(newReservation.getReservationEnd(), newReservation.getReservationStart());
         var difference = Math.abs(duration.toMinutes());
         if (MAX_RESERVATION_TIME < difference || difference <= MIN_RESERVATION_TIME) {
@@ -33,7 +33,7 @@ class ReservationsValidator {
         }
     }
 
-    private void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
+    private void checkAvailability(ReservationsDTO newReservation, Long id) {
         conferenceRoomsRepository.findById(id).ifPresent(rooms -> {
             if(rooms.getReservationsList().stream()
                     .anyMatch(reservation -> (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||

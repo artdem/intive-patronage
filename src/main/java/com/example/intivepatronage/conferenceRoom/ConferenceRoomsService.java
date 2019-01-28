@@ -35,7 +35,7 @@ public class ConferenceRoomsService {
         return convertToDto(conferenceRoom);
     }
 
-    ConferenceRoomsDTO newConferenceRoom(ConferenceRoomsDTO newConferenceRoom) throws UniqueNameException {
+    ConferenceRoomsDTO newConferenceRoom(ConferenceRoomsDTO newConferenceRoom) {
         var conferenceRoomName = newConferenceRoom.getRoomName();
         if (roomsRepository.existsConferenceRoomByRoomName(conferenceRoomName)) {
             throw new UniqueNameException();
@@ -45,7 +45,7 @@ public class ConferenceRoomsService {
         return convertToDto(roomsRepository.save(convertToEntity(newConferenceRoom)));
     }
 
-    ConferenceRoomsDTO updateConferenceRoom(ConferenceRoomsDTO conferenceRoomUpdate, Long id) throws UniqueNameException, ConferenceRoomNotFoundException {
+    ConferenceRoomsDTO updateConferenceRoom(ConferenceRoomsDTO conferenceRoomUpdate, Long id) {
         var conferenceRoomName = conferenceRoomUpdate.getRoomName();
         var conferenceRoomId = convertToDto(roomsRepository.findByRoomName(conferenceRoomName));
         if (roomsRepository.existsConferenceRoomByRoomName(conferenceRoomName) && !conferenceRoomId.getId().equals(id)) {
@@ -56,7 +56,7 @@ public class ConferenceRoomsService {
         return convertToDto(roomsRepository.save(convertToEntity(conferenceRoomUpdater(conferenceRoomUpdate, conferenceRoomToUpdate))));
     }
 
-    String deleteConferenceRoom(Long id) throws ConferenceRoomNotFoundException {
+    String deleteConferenceRoom(Long id) {
         roomsRepository.deleteById(id);
         return "Conference Room no. " + id + " successfully deleted.";
     }

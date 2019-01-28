@@ -29,13 +29,13 @@ public class ReservationsService {
                 .collect(Collectors.toList());
     }
 
-    ReservationsDTO reservationById(Long id) throws ReservationNotFoundException {
+    ReservationsDTO reservationById(Long id) {
         var reservation = reservationsRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException(id));
         return convertToDto(reservation);
     }
 
-    ReservationsDTO newReservation(ReservationsDTO newReservation) throws UniqueNameException, ConferenceRoomNotFoundException, ConferenceRoomAlreadyBookedException, IllegalStartEndTimeException, ReservationDurationException {
+    ReservationsDTO newReservation(ReservationsDTO newReservation) {
         if (reservationsRepository.existsReservationByReservationName(newReservation.getReservationName())) {
             throw new UniqueNameException();
         }
@@ -43,7 +43,7 @@ public class ReservationsService {
         return convertToDto(reservationsRepository.save(convertToEntity(newReservationBuild)));
     }
 
-    ReservationsDTO updateReservation(ReservationsDTO reservationUpdate, Long id) throws UniqueNameException, ReservationNotFoundException {
+    ReservationsDTO updateReservation(ReservationsDTO reservationUpdate, Long id) {
         var reservationName = reservationUpdate.getReservationName();
         var reservationId = convertToDto(reservationsRepository.findByReservationName(reservationName));
         if (reservationsRepository.existsReservationByReservationName(reservationName) && !reservationId.getId().equals(id)) {
@@ -58,7 +58,7 @@ public class ReservationsService {
         reservationsRepository.deleteById(id);
     }
 
-    private ReservationsDTO reservationCreator(ReservationsDTO newReservation, Long id) throws ConferenceRoomNotFoundException {
+    private ReservationsDTO reservationCreator(ReservationsDTO newReservation, Long id) {
         conferenceRoomsRepository.findById(id).ifPresentOrElse(conferenceRoom -> {
             newReservation.setRoom(conferenceRoomsRepository.findById(newReservation.getRoomId())
                     .orElseThrow(() -> new ConferenceRoomNotFoundException(newReservation.getRoomId())));

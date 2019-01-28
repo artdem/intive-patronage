@@ -1,5 +1,6 @@
 package com.example.intivepatronage.reservation;
 
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.example.intivepatronage.conferenceRoom.ConferenceRoomsRepository;
 import com.example.intivepatronage.exceptions.ConferenceRoomAlreadyBookedException;
 import com.example.intivepatronage.exceptions.IllegalStartEndTimeException;
@@ -34,17 +35,22 @@ class ReservationsValidator {
     }
 
     private void checkAvailability(ReservationsDTO newReservation, Long id) {
-        conferenceRoomsRepository.findById(id).ifPresent(rooms -> {
-            if(rooms.getReservationsList().stream()
-                    .anyMatch(reservation -> (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
-                                    (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
-                                    (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
-                                    (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
-                                    ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))
-                    )){
-                throw new ConferenceRoomAlreadyBookedException();
-            }
-        });
+        conferenceRoomsRepository.findById(id).ifPresent(room -> accept(room, newReservation));
+    }
+
+    private boolean test(ReservationsDTO newReservation, Reservations reservation) {
+        return (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
+                (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
+                (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
+                (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
+                ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))));
+    }
+
+    private void accept(ConferenceRooms room, ReservationsDTO newReservation) {
+        if (room.getReservationsList().stream()
+                .anyMatch(reservation -> ReservationsValidator.this.test(newReservation, reservation))) {
+            throw new ConferenceRoomAlreadyBookedException();
+        }
     }
 
     void validate (ReservationsDTO newReservation, Long id){

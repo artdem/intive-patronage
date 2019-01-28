@@ -1,5 +1,6 @@
 package com.example.intivepatronage.reservation;
 
+import com.example.intivepatronage.conferenceRoom.ConferenceRooms;
 import com.example.intivepatronage.exceptions.*;
 import com.example.intivepatronage.conferenceRoom.ConferenceRoomsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +50,8 @@ public class ReservationsService {
         if (reservationsRepository.existsReservationByReservationName(reservationName) && !reservationId.getId().equals(id)) {
             throw new UniqueNameException();
         }
-        ReservationsDTO reservationToUpdate = convertToDto(reservationsRepository.findById(id).orElseThrow(() -> new ReservationNotFoundException(id)));
+        ReservationsDTO reservationToUpdate = convertToDto(reservationsRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException(id)));
         ReservationsDTO updatedReservation = reservationUpdater(reservationUpdate, reservationToUpdate);
         return convertToDto(reservationsRepository.save(convertToEntity(updatedReservation)));
     }
@@ -59,12 +61,7 @@ public class ReservationsService {
     }
 
     private ReservationsDTO reservationCreator(ReservationsDTO newReservation, Long id) {
-        conferenceRoomsRepository.findById(id).ifPresentOrElse(conferenceRoom -> {
-            newReservation.setRoom(conferenceRoomsRepository.findById(newReservation.getRoomId())
-                    .orElseThrow(() -> new ConferenceRoomNotFoundException(newReservation.getRoomId())));
-            validator.validate(newReservation, conferenceRoom.getId());
-            conferenceRoom.setBooked(true);
-        }, () -> {
+        conferenceRoomsRepository.findById(id).ifPresentOrElse(room -> accept(room, newReservation), () -> {
             throw new ConferenceRoomNotFoundException(id);
         });
         return newReservation;
@@ -76,6 +73,13 @@ public class ReservationsService {
         reservationToUpdate.setReservationStart(reservationUpdate.getReservationStart());
         reservationToUpdate.setReservationEnd(reservationUpdate.getReservationEnd());
         return reservationToUpdate;
+    }
+
+    private void accept(ConferenceRooms room, ReservationsDTO newReservation) {
+        newReservation.setRoom(conferenceRoomsRepository.findById(newReservation.getRoomId())
+                .orElseThrow(() -> new ConferenceRoomNotFoundException(newReservation.getRoomId())));
+        validator.validate(newReservation, room.getId());
+        room.setBooked(true);
     }
 
     private ReservationsDTO convertToDto(Reservations reservations) {

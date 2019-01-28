@@ -28,12 +28,12 @@ public class Reservations {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
 
-    private transient Long conferenceRoomId;
+    private transient Long roomId;
 
     @OneToOne
-    @JoinColumn(name = "conferenceRoom_id")
+    @JoinColumn(name = "room_id")
     @JsonIgnoreProperties("reservationsList")
-    private ConferenceRooms conferenceRoom;
+    private ConferenceRooms room;
 
     public Reservations() {
     }
@@ -70,19 +70,19 @@ public class Reservations {
         this.reservationEnd = reservationEnd;
     }
 
-    public Long getConferenceRoomId() {
-        return conferenceRoomId;
+    public Long getRoomId() {
+        return roomId;
     }
 
-    public void setConferenceRoomId(Long conferenceRoomId) {
-        this.conferenceRoomId = conferenceRoomId;
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
     }
 
-    public ConferenceRooms getConferenceRoom() {
-        return conferenceRoom;
+    public ConferenceRooms getRoom() {
+        return room;
     }
 
-    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
-        this.conferenceRoom = conferenceRoom;
+    public void setRoom(ConferenceRooms room) {
+        this.room = room;
     }
 }

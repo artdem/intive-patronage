@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConferenceRoomsRepository extends JpaRepository<ConferenceRooms, Long> {
 
-    boolean existsConferenceRoomByConferenceRoomName(String name);
+    boolean existsConferenceRoomByRoomName(String name);
 
-    ConferenceRooms findByConferenceRoomName(String name);
+    ConferenceRooms findByRoomName(String name);
 
 }

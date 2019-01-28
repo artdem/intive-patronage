@@ -9,35 +9,35 @@ import java.util.List;
 @RequestMapping("/conferencerooms")
 class ConferenceRoomsController {
 
-    private final ConferenceRoomsService conferenceRoomsService;
+    private final ConferenceRoomsService roomsService;
 
-    ConferenceRoomsController(ConferenceRoomsService conferenceRoomsService) {
-        this.conferenceRoomsService = conferenceRoomsService;
+    ConferenceRoomsController(ConferenceRoomsService roomsService) {
+        this.roomsService = roomsService;
     }
 
     @GetMapping
     List<ConferenceRoomsDTO> allConferenceRooms() {
-        return conferenceRoomsService.allConferenceRooms();
+        return roomsService.allConferenceRooms();
     }
 
     @GetMapping("/{id}")
     ConferenceRoomsDTO conferenceRoomById(@PathVariable Long id) {
-        return conferenceRoomsService.conferenceRoomById(id);
+        return roomsService.conferenceRoomById(id);
     }
 
     @PostMapping
     ConferenceRoomsDTO addConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO newConferenceRoom) {
-        return conferenceRoomsService.newConferenceRoom(newConferenceRoom);
+        return roomsService.newConferenceRoom(newConferenceRoom);
     }
 
     @PutMapping("/{id}")
     ConferenceRoomsDTO updateConferenceRoom(@Valid @RequestBody ConferenceRoomsDTO updatedConferenceRoom, @PathVariable Long id) {
-        return conferenceRoomsService.updateConferenceRoom(updatedConferenceRoom, id);
+        return roomsService.updateConferenceRoom(updatedConferenceRoom, id);
     }
 
     @DeleteMapping("/{id}")
     String deleteConferenceRoom(@PathVariable Long id) {
-        return (conferenceRoomsService.deleteConferenceRoom(id));
+        return (roomsService.deleteConferenceRoom(id));
     }
 
 

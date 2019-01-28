@@ -7,7 +7,6 @@ import com.example.intivepatronage.exceptions.ReservationDurationException;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 @Component
 class ReservationsValidator {
@@ -20,15 +19,13 @@ class ReservationsValidator {
         this.conferenceRoomsRepository = conferenceRoomsRepository;
     }
 
-    void checkReservationDate(ReservationsDTO newReservation) throws IllegalStartEndTimeException {
-        newReservation.getReservationStart().truncatedTo(ChronoUnit.MINUTES);
-        newReservation.getReservationEnd().truncatedTo(ChronoUnit.MINUTES);
+    private void checkDate(ReservationsDTO newReservation) throws IllegalStartEndTimeException {
         if (newReservation.getReservationStart().isAfter(newReservation.getReservationEnd())) {
             throw new IllegalStartEndTimeException();
         }
     }
 
-    void checkReservationDuration(ReservationsDTO newReservation) throws ReservationDurationException {
+    private void checkDuration(ReservationsDTO newReservation) throws ReservationDurationException {
         var duration = Duration.between(newReservation.getReservationEnd(), newReservation.getReservationStart());
         var difference = Math.abs(duration.toMinutes());
         if (MAX_RESERVATION_TIME < difference || difference <= MIN_RESERVATION_TIME) {
@@ -36,9 +33,9 @@ class ReservationsValidator {
         }
     }
 
-    void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
-        conferenceRoomsRepository.findById(id).ifPresent(conferenceRooms -> {
-            if(conferenceRooms.getReservationsList().stream()
+    private void checkAvailability(ReservationsDTO newReservation, Long id) throws ConferenceRoomAlreadyBookedException {
+        conferenceRoomsRepository.findById(id).ifPresent(rooms -> {
+            if(rooms.getReservationsList().stream()
                     .anyMatch(reservation -> (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
                                     (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
                                     (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
@@ -48,5 +45,11 @@ class ReservationsValidator {
                 throw new ConferenceRoomAlreadyBookedException();
             }
         });
+    }
+
+    void validate (ReservationsDTO newReservation, Long id){
+        checkDate(newReservation);
+        checkDuration(newReservation);
+        checkAvailability(newReservation, id);
     }
 }

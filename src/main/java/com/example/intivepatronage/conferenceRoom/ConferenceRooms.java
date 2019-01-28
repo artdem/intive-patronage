@@ -16,7 +16,7 @@ public class ConferenceRooms {
     private Long id;
 
     @Column(unique = true)
-    private String conferenceRoomName;
+    private String roomName;
 
     private int floor;
 
@@ -28,14 +28,14 @@ public class ConferenceRooms {
 
     @ManyToOne
     @JoinColumn(name = "organization_id")
-    @JsonIgnoreProperties("conferenceRoomsList")
+    @JsonIgnoreProperties("roomsList")
     private Organizations organization;
 
     @OneToMany(targetEntity = Reservations.class,
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
-            mappedBy = "conferenceRoom")
-    @JsonIgnoreProperties("conferenceRoom")
+            mappedBy = "room")
+    @JsonIgnoreProperties("room")
     private List<Reservations> reservationsList;
 
     public ConferenceRooms() {
@@ -49,13 +49,14 @@ public class ConferenceRooms {
         this.id = id;
     }
 
-    public String getConferenceRoomName() {
-        return conferenceRoomName;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setConferenceRoomName(String conferenceRoomName) {
-        this.conferenceRoomName = conferenceRoomName;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
+
 
     public int getFloor() {
         return floor;

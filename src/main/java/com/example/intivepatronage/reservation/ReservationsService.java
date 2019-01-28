@@ -14,7 +14,7 @@ public class ReservationsService {
     private final ReservationsRepository reservationsRepository;
     private final ConferenceRoomsRepository conferenceRoomsRepository;
     private final ObjectMapper objectMapper;
-    private ReservationsValidator validator;
+    private final ReservationsValidator validator;
 
     public ReservationsService(ReservationsRepository reservationsRepository, ConferenceRoomsRepository conferenceRoomsRepository, ObjectMapper objectMapper, ReservationsValidator validator) {
         this.reservationsRepository = reservationsRepository;
@@ -39,7 +39,7 @@ public class ReservationsService {
         if (reservationsRepository.existsReservationByReservationName(newReservation.getReservationName())) {
             throw new UniqueNameException();
         }
-        var newReservationBuild = reservationCreator(newReservation, newReservation.getConferenceRoomId());
+        var newReservationBuild = reservationCreator(newReservation, newReservation.getRoomId());
         return convertToDto(reservationsRepository.save(convertToEntity(newReservationBuild)));
     }
 
@@ -60,11 +60,9 @@ public class ReservationsService {
 
     private ReservationsDTO reservationCreator(ReservationsDTO newReservation, Long id) throws ConferenceRoomNotFoundException {
         conferenceRoomsRepository.findById(id).ifPresentOrElse(conferenceRoom -> {
-            newReservation.setConferenceRoom(conferenceRoomsRepository.findById(newReservation.getConferenceRoomId())
-                    .orElseThrow(() -> new ConferenceRoomNotFoundException(newReservation.getConferenceRoomId())));
-            validator.checkReservationDate(newReservation);
-            validator.checkReservationDuration(newReservation);
-            validator.checkAvailability(newReservation, conferenceRoom.getId());
+            newReservation.setRoom(conferenceRoomsRepository.findById(newReservation.getRoomId())
+                    .orElseThrow(() -> new ConferenceRoomNotFoundException(newReservation.getRoomId())));
+            validator.validate(newReservation, conferenceRoom.getId());
             conferenceRoom.setBooked(true);
         }, () -> {
             throw new ConferenceRoomNotFoundException(id);
@@ -73,9 +71,7 @@ public class ReservationsService {
     }
 
     private ReservationsDTO reservationUpdater(ReservationsDTO reservationUpdate, ReservationsDTO reservationToUpdate) {
-        validator.checkReservationDate(reservationUpdate);
-        validator.checkReservationDuration(reservationUpdate);
-        validator.checkAvailability(reservationUpdate, reservationUpdate.getConferenceRoomId());
+        validator.validate(reservationUpdate, reservationUpdate.getRoomId());
         reservationToUpdate.setReservationName(reservationUpdate.getReservationName());
         reservationToUpdate.setReservationStart(reservationUpdate.getReservationStart());
         reservationToUpdate.setReservationEnd(reservationUpdate.getReservationEnd());

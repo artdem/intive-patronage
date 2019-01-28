@@ -22,7 +22,7 @@ public class Organizations {
             cascade = CascadeType.ALL,
             mappedBy = "organization")
     @JsonIgnoreProperties("organization")
-    private List<ConferenceRooms> conferenceRoomsList;
+    private List<ConferenceRooms> roomsList;
 
     public Organizations() {
     }
@@ -43,11 +43,11 @@ public class Organizations {
         this.organizationName = organizationName;
     }
 
-    public List<ConferenceRooms> getConferenceRoomsList() {
-        return conferenceRoomsList;
+    public List<ConferenceRooms> getRoomsList() {
+        return roomsList;
     }
 
-    public void setConferenceRoomsList(List<ConferenceRooms> conferenceRoomsList) {
-        this.conferenceRoomsList = conferenceRoomsList;
+    public void setRoomsList(List<ConferenceRooms> roomsList) {
+        this.roomsList = roomsList;
     }
 }

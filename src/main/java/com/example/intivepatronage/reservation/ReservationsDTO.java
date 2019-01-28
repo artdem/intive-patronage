@@ -8,8 +8,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-public class ReservationsDTO {
+class ReservationsDTO {
 
     private Long id;
 
@@ -25,9 +26,9 @@ public class ReservationsDTO {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationEnd;
 
-    private transient Long conferenceRoomId;
+    private transient Long roomId;
 
-    private ConferenceRooms conferenceRoom;
+    private ConferenceRooms room;
 
     public ReservationsDTO() {
     }
@@ -53,7 +54,7 @@ public class ReservationsDTO {
     }
 
     public void setReservationStart(LocalDateTime reservationStart) {
-        this.reservationStart = reservationStart;
+        this.reservationStart = reservationStart.truncatedTo(ChronoUnit.MINUTES);
     }
 
     public LocalDateTime getReservationEnd() {
@@ -61,22 +62,22 @@ public class ReservationsDTO {
     }
 
     public void setReservationEnd(LocalDateTime reservationEnd) {
-        this.reservationEnd = reservationEnd;
+        this.reservationEnd = reservationEnd.truncatedTo(ChronoUnit.MINUTES);
     }
 
-    public ConferenceRooms getConferenceRoom() {
-        return conferenceRoom;
+    public ConferenceRooms getRoom() {
+        return room;
     }
 
-    public void setConferenceRoom(ConferenceRooms conferenceRoom) {
-        this.conferenceRoom = conferenceRoom;
+    public void setRoom(ConferenceRooms room) {
+        this.room = room;
     }
 
-    public Long getConferenceRoomId() {
-        return conferenceRoomId;
+    public Long getRoomId() {
+        return roomId;
     }
 
-    public void setConferenceRoomId(Long conferenceRoomId) {
-        this.conferenceRoomId = conferenceRoomId;
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
     }
 }

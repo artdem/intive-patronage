@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class OrganizationsDTO {
+class OrganizationsDTO {
 
     private Long id;
 
@@ -14,7 +14,7 @@ public class OrganizationsDTO {
     @Size(min = 2, max = 20, message = "Organizations name must be between 2 and 20 characters.")
     private String organizationName;
 
-    private List<ConferenceRooms> conferenceRoomsList;
+    private List<ConferenceRooms> roomsList;
 
     public OrganizationsDTO() {
     }
@@ -35,11 +35,11 @@ public class OrganizationsDTO {
         this.organizationName = organizationName;
     }
 
-    public List<ConferenceRooms> getConferenceRoomsList() {
-        return conferenceRoomsList;
+    public List<ConferenceRooms> getRoomsList() {
+        return roomsList;
     }
 
-    public void setConferenceRoomsList(List<ConferenceRooms> conferenceRoomsList) {
-        this.conferenceRoomsList = conferenceRoomsList;
+    public void setRoomsList(List<ConferenceRooms> roomsList) {
+        this.roomsList = roomsList;
     }
 }

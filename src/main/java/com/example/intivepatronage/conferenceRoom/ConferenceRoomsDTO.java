@@ -6,13 +6,13 @@ import com.example.intivepatronage.reservation.Reservations;
 import javax.validation.constraints.*;
 import java.util.List;
 
-public class ConferenceRoomsDTO {
+class ConferenceRoomsDTO {
 
     private Long id;
 
     @NotBlank(message = "Conference room name must not be blank.")
     @Size(min = 2, max = 20, message = "Conference room name must be between 2 and 20 characters.")
-    private String conferenceRoomName;
+    private String roomName;
 
     @NotNull
     @Min(value = 0, message = "Floor cannot be below 0.")
@@ -41,12 +41,12 @@ public class ConferenceRoomsDTO {
         this.id = id;
     }
 
-    public String getConferenceRoomName() {
-        return conferenceRoomName;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setConferenceRoomName(String conferenceRoomName) {
-        this.conferenceRoomName = conferenceRoomName;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public int getFloor() {
